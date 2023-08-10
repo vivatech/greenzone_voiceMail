@@ -20,6 +20,7 @@
 	<!-- 1.0.21: Added New Api for MCA  17-July-2023 for Hormuud -->
 	<!-- 1.0.22: Update Api Support for Save messages   26-July-2023 for Hormuud -->
 	<!-- 1.0.22: Update Api Support for fetch messages on messageCount  27-July-2023 for Hormuud -->
+	<!-- 1.0.22: committed in github-->
 	<version>1.0.22-SNAPSHOT</version>
 	<name>greenzone-voicemail</name>
 	<packaging>jar</packaging>
