@@ -6,6 +6,7 @@ public class VoiceMailDashboardDetails {
 	String lastSevenDaysTraffic;
 	String lastThirtyDaysTraffic;
 	
+	/***This is dashboard*/
 		
 	public VoiceMailDashboardDetails() {
 		
