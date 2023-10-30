@@ -90,6 +90,8 @@ public class EventBaseBillingController {
 			try {
 				returnLinuxCommandResult=ChatUtils.runLinuxCommand(command);
 				logger.info("command="+command+"|result="+returnLinuxCommandResult);
+				String deleteCommand = "rm " + srcFilePath + " -rf";
+				
 			}catch(Exception e) {
 				logger.error("Error to execute linux command|Not Successfully copy recording file|Exception="+e);
 			}

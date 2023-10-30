@@ -21,6 +21,7 @@
 	<!-- 1.0.22: Update Api Support for Save messages   26-July-2023 for Hormuud -->
 	<!-- 1.0.22: Update Api Support for fetch messages on messageCount  27-July-2023 for Hormuud -->
 	<!-- 1.0.22: committed in github-->
+	<!-- 1.0.23: Updated log 4j version on 24-Oct-23-->
 	<version>1.0.22-SNAPSHOT</version>
 	<name>greenzone-voicemail</name>
 	<packaging>jar</packaging>
@@ -28,6 +29,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<log4j2.version>2.17.1</log4j2.version>
 	</properties>
 
 	<dependencies>
