@@ -42,7 +42,7 @@ public class CheckVoiceSmsDetails {
 			@RequestParam(required = false) String status,@RequestParam(required = false) String messageCount,HttpServletRequest req,
 			HttpServletResponse res) {
 		
-		logger.info("checkVoiceSmsDetails|aparty="+aparty+"|bparty="+bparty+"|status="+status+"|messageCount="+messageCount);
+		logger.info("checkVoiceSmsDetailsReq|aparty="+aparty+"|bparty="+bparty+"|status="+status+"|messageCount="+messageCount);
 		if(status == null || status.isEmpty() || status=="")
 		{
 			status="A";

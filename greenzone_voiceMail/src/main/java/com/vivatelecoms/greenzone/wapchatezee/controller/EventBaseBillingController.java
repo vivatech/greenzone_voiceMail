@@ -77,20 +77,22 @@ public class EventBaseBillingController {
 			
 			DateFormat currDateTimeFormat= new SimpleDateFormat("ddHHmmss");
 			String currDateTime = currDateTimeFormat.format(currDate);
-			logger.info("currYear="+currYear+"|currMonth="+currMonth+"|currDate="+currDate+"|currDateTime="+currDateTime);
+			logger.trace("currYear="+currYear+"|currMonth="+currMonth+"|currDate="+currDate+"|currDateTime="+currDateTime);
 			String recordingFileName=aparty.substring(aparty.length()-4)+vMsisdn.substring(vMsisdn.length()-4)+currDateTime+".wav";
-			logger.info("aa="+aparty.substring(aparty.length()-4)+"|vm="+vMsisdn.substring(vMsisdn.length()-4)+"|dd="+(Integer.parseInt(todayDate.toString())/10)+"|recordingFileName="+recordingFileName);
+			logger.trace("aa="+aparty.substring(aparty.length()-4)+"|vm="+vMsisdn.substring(vMsisdn.length()-4)+"|dd="+(Integer.parseInt(todayDate.toString())/10)+"|recordingFileName="+recordingFileName);
 			String destFilePath= basePath+"/"+currYear+"/"+currMonth+"/"+(Integer.parseInt(todayDate.toString())/10)+"/"+recordingFileName;
 			String command = "cp " + srcFilePath +" " + destFilePath;
 			logger.info("srcFilePath="+srcFilePath+"|destFilePath="+destFilePath+"|command="+command);
 			newRecordingFilePath= destFilePath;
 			newRecordingFilePath=newRecordingFilePath.replace(basePath, env.getProperty("RECORDING_HTTP_PATH"));
-			logger.info("newRecordingFilePath="+newRecordingFilePath);
+			logger.trace("newRecordingFilePath="+newRecordingFilePath);
 			String returnLinuxCommandResult="-1";
 			try {
 				returnLinuxCommandResult=ChatUtils.runLinuxCommand(command);
 				logger.info("command="+command+"|result="+returnLinuxCommandResult);
 				String deleteCommand = "rm " + srcFilePath + " -rf";
+				returnLinuxCommandResult=ChatUtils.runLinuxCommand(deleteCommand);
+				logger.info("command="+deleteCommand+"|result="+returnLinuxCommandResult);
 				
 			}catch(Exception e) {
 				logger.error("Error to execute linux command|Not Successfully copy recording file|Exception="+e);
@@ -229,7 +231,7 @@ public class EventBaseBillingController {
 			    
 				String insertEventBillingCdrQuery = ChatUtils.insertEventBaseChargingQuery(env.getProperty("SQL37_INSERT_VSMS_BILLING_CDR"),transactionId.toString(),aparty,vMsisdn,interfaceId, action,serviceId, productId, isCharging, result, errorCode,chargingAmount);
 				
-				logger.info("final event billing insert query="+insertEventBillingCdrQuery);
+				logger.trace("final event billing insert query="+insertEventBillingCdrQuery);
 				try {
 					int insertQueryResult= jdbcTemplate.update(insertEventBillingCdrQuery);
 					if(insertQueryResult <= 0)
@@ -255,7 +257,7 @@ public class EventBaseBillingController {
 				/**insert details for voice sms**/
 				String messageStatus="A";
 				String insertVoiceSMSInfoQuery = ChatUtils.insertVsmsMessageDetailsQuery(env.getProperty("SQL38_INSERT_VSMS_MESSAGE_DETAILS"),"23243432", aparty,vMsisdn,interfaceId,messageStatus,duration,newRecordingFilePath);
-				logger.info("fine voice sms info query="+insertVoiceSMSInfoQuery);
+				logger.trace("fine voice sms info query="+insertVoiceSMSInfoQuery);
 				try {
 					int insertQueryResult= jdbcTemplate.update(insertVoiceSMSInfoQuery);
 					if(insertQueryResult <= 0)
@@ -277,7 +279,7 @@ public class EventBaseBillingController {
 				if(env.getProperty("VMAIL_BPARTY_SMS_COUNTWISE_ENABLE").equalsIgnoreCase("Y"))
 				{
 					String selectQuery = ChatUtils.getVoiceMailCountDetails(env.getProperty("SQL50_SELCT_VOICEMAIL_MSISDNWISE_COUNT"),aparty,vMsisdn);
-					logger.info("Get count for total voice messages="+selectQuery);
+					logger.trace("Get count for total voice messages="+selectQuery);
 					try {
 						List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(selectQuery);
 						if(queryForList.isEmpty()) 
@@ -314,7 +316,7 @@ public class EventBaseBillingController {
 				String currentTime = timeFormat.format(date);
 				DateFormat dateFormat = new SimpleDateFormat(dateFormatString);
 				String currentDate = dateFormat.format(date);
-				logger.info("currentDate="+currentDate+"|currentTime="+currentTime);
+				logger.trace("currentDate="+currentDate+"|currentTime="+currentTime);
 				String vsmsRecordingSMS;
 				if(env.getProperty("VMAIL_BPARTY_SMS_COUNTWISE_ENABLE").equalsIgnoreCase("Y"))
 				{
@@ -348,11 +350,11 @@ public class EventBaseBillingController {
 				else {
 					vsmsRecordingSMS= ChatUtils.getSMSText(env.getProperty("VSMS_RECORDING_SMS"), aparty,currentDate,currentTime);
 				}
-				logger.info("final bparty voice message vsmsRecordingSMS="+vsmsRecordingSMS);
+				logger.trace("final bparty voice message vsmsRecordingSMS="+vsmsRecordingSMS);
 				vsmsRecordingSMS=vsmsRecordingSMS.replace(" ", "%20");
-				logger.info("final vsmsRecordingSMS="+vsmsRecordingSMS);
+				logger.trace("final vsmsRecordingSMS="+vsmsRecordingSMS);
 				String smsUrl = env.getProperty("SMS_SEND_URL");
-				logger.info("EventBaseBilling|smsUrl="+smsUrl);
+				logger.trace("EventBaseBilling|smsUrl="+smsUrl);
 				smsUrl = smsUrl +"&to=%2B252"+vMsisdn+"&text="+vsmsRecordingSMS ;
 				logger.info("EventBaseBilling|smsUrl ="+smsUrl);
 				/**Hit RestFul Api*/
@@ -362,7 +364,7 @@ public class EventBaseBillingController {
 					ResponseEntity<String> smsUrlResult = restTemplate.getForEntity(smsUri, String.class);
 					HttpStatus statusCode= smsUrlResult.getStatusCode();
 					logger.info("reuslt="+smsUrlResult);
-					logger.info("statusCode="+statusCode+"|"+smsUrlResult.getStatusCodeValue());
+					logger.trace("statusCode="+statusCode+"|"+smsUrlResult.getStatusCodeValue());
 					if(smsUrlResult.getStatusCodeValue()==202||smsUrlResult.getStatusCodeValue()==200) {
 						logger.info("send SMS successfully|aparty="+aparty+"|vMsisdn="+vMsisdn);
 					}

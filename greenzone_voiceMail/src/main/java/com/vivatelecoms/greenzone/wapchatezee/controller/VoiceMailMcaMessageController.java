@@ -106,7 +106,7 @@ public class VoiceMailMcaMessageController {
 					String currentTimeMca = timeFormatMca.format(dateMca);
 					DateFormat dateFormatMca = new SimpleDateFormat(dateFormatStringMca);
 					String currentDateMca = dateFormatMca.format(dateMca);
-					logger.info("currentDateMca="+currentDateMca+"|currentTimeMca="+currentTimeMca);
+					logger.trace("currentDateMca="+currentDateMca+"|currentTimeMca="+currentTimeMca);
 					String voiceMailMcaSMS;
 					if(defaultLanguage.equalsIgnoreCase("som"))
 					{	
@@ -117,13 +117,13 @@ public class VoiceMailMcaMessageController {
 					}else {
 						voiceMailMcaSMS= ChatUtils.getSMSText(env.getProperty("VMAIL_BPARTY_MCA_SMS"), aparty,currentDateMca,currentTimeMca);
 					}
-					logger.info("final voiceMailMcaSMS="+voiceMailMcaSMS);
+					logger.trace("final voiceMailMcaSMS="+voiceMailMcaSMS);
 					voiceMailMcaSMS=voiceMailMcaSMS.replace(" ", "%20");
-					logger.info("final voiceMailMcaSMS="+voiceMailMcaSMS);
+					logger.trace("final voiceMailMcaSMS="+voiceMailMcaSMS);
 					String mcaSmsUrl = env.getProperty("SMS_SEND_URL");
-					logger.info("EventBaseBilling|mcaSmsUrl="+mcaSmsUrl);
+					logger.trace("EventBaseBilling|mcaSmsUrl="+mcaSmsUrl);
 					mcaSmsUrl = mcaSmsUrl +"&to=%2B252"+vMsisdn+"&text="+voiceMailMcaSMS ;
-					logger.info("EventBaseBilling|mcaSmsUrl ="+mcaSmsUrl);
+					logger.info("VoiceMailMcaMessage|mcaSmsUrl="+mcaSmsUrl);
 					/**SMS URL Hitting*/
 					try {
 						URI mcaSmsUri = new URI(mcaSmsUrl);
@@ -131,7 +131,7 @@ public class VoiceMailMcaMessageController {
 						ResponseEntity<String> mcaSmsUrlResult = restTemplate.getForEntity(mcaSmsUri, String.class);
 						HttpStatus statusCode= mcaSmsUrlResult.getStatusCode();
 						logger.info("mcaSmsUrlResult="+mcaSmsUrlResult);
-						logger.info("statusCode="+statusCode+"|"+mcaSmsUrlResult.getStatusCodeValue());
+						logger.trace("statusCode="+statusCode+"|"+mcaSmsUrlResult.getStatusCodeValue());
 						if(mcaSmsUrlResult.getStatusCodeValue()==202||mcaSmsUrlResult.getStatusCodeValue()==200) {
 							logger.info("send SMS successfully to bparty for MCA|aparty="+aparty+"|vMsisdn="+vMsisdn);
 							postClientRes="0";
