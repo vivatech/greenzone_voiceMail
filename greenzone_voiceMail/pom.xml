@@ -22,7 +22,9 @@
 	<!-- 1.0.22: Update Api Support for fetch messages on messageCount  27-July-2023 for Hormuud -->
 	<!-- 1.0.22: committed in github-->
 	<!-- 1.0.23: Updated log 4j version on 24-Oct-23-->
-	<version>1.0.22-SNAPSHOT</version>
+	<!-- 1.0.24: Async mca flow support 25-Nov-23-->
+	<!-- 1.0.25: New api for voicemail message save 05-Dec-23-->
+	<version>1.0.25-SNAPSHOT</version>
 	<name>greenzone-voicemail</name>
 	<packaging>jar</packaging>
 	<description>Demo project for Spring Boot</description>

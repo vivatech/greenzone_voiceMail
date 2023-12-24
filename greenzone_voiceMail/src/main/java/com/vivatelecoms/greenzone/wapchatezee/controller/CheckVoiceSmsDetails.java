@@ -54,7 +54,7 @@ public class CheckVoiceSmsDetails {
 		String zvMsisdn="0"+aparty;
 		logger.info("checkVoiceSmsDetails|aparty="+aparty+"|bparty="+bparty+"|zvMsisdn="+zvMsisdn);
 		String vSMSMessageQuery= ChatUtils.getVoiceSmsQuery(env.getProperty("SQL39_SELECT_VSMS_MESSAGE_DETAILS"), aparty,zvMsisdn,status,messageCount);
-		logger.info("final check voice sms detail Query="+vSMSMessageQuery);
+	//	logger.info("final check voice sms detail Query="+vSMSMessageQuery);
 		String responseString = new String();
 		String dbError ="N";
 		int counter=0;

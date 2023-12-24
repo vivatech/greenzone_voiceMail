@@ -49,7 +49,7 @@ public class DeleteVoiceSms {
 		/***/
 		String responseString = new String();
 		String result="Y";
-		logger.info("final deleteVoiceSms Query="+vSMSMesageBackupQuery);
+		//logger.info("final deleteVoiceSms Query="+vSMSMesageBackupQuery);
 		
 		VoiceSmsMessageDetails data = new VoiceSmsMessageDetails();
 		
@@ -66,7 +66,7 @@ public class DeleteVoiceSms {
 			}else 
 			{
 				for (Map<String, Object> row : queryForList) {
-					logger.info("for loop");
+					//logger.info("for loop");
 					data.setId(Integer.parseInt(row.get("id").toString()));
 					data.setSubscriber_id(row.get("subscriber_id").toString());
 					data.setV_msisdn(row.get("v_msisdn").toString());
@@ -110,13 +110,13 @@ public class DeleteVoiceSms {
 		vSMSMesageBackupInsertQuery =vSMSMesageBackupInsertQuery.replace("{sendDate}", saveData.getSend_date());
 		//vSMSMesageBackupInsertQuery =vSMSMesageBackupInsertQuery.replace("{listeningDate}", saveData.getListening_date());
 		vSMSMesageBackupInsertQuery =vSMSMesageBackupInsertQuery.replace("{recordingPath}", saveData.getRecording_path());
-		logger.info("final Query="+vSMSMesageBackupInsertQuery);
+		//logger.info("final Query="+vSMSMesageBackupInsertQuery);
 		try {
 			int insertQueryResult = jdbcTemplate.update(vSMSMesageBackupInsertQuery);
 			if (insertQueryResult <= 0) {
 				logger.error("Failed to insert into VSMS_MESSAGE_BACKUP table");
 			} else {
-				logger.info("Successfully to insert into VSMS_MESSAGE_BACKUP table|resultChangesRow" + insertQueryResult);
+				logger.info("Successfully to insert into VSMS_MESSAGE_BACKUP table|resultChangesRow=" + insertQueryResult);
 				/**delete from VSMS_MESSAGE_DETAILS table**/
 				String deleteQuery = env.getProperty("SQL42_DELETE_VSMS_MESSAGE_DETAILS");
 				deleteQuery=deleteQuery.replace("{voiceMessageId}", voiceMessageId);
@@ -125,7 +125,7 @@ public class DeleteVoiceSms {
 				if (deleteQueryResult <= 0) {
 					logger.error("Failed to delete into Inbox table");
 				} else {
-					logger.info("Successfully to  delete into VSMS_MESSAGE_DETAILS table|resultChangesRow" + deleteQueryResult);
+					logger.info("Successfully to  delete into VSMS_MESSAGE_DETAILS table|resultChangesRow=" + deleteQueryResult);
 				}
 				
 			}

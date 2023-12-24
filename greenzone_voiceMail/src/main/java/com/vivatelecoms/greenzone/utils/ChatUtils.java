@@ -147,9 +147,20 @@ public class ChatUtils {
 	}
 	public static String getVoiceMailCountDetails(String query, String aparty,String vMsisdn)
 	{
+		String lastDigit = String.valueOf(vMsisdn.charAt(vMsisdn.length() - 1));
 		String finalQuery = query.replace("{aparty}", aparty);
 		finalQuery = finalQuery.replace("{vMsisdn}", vMsisdn);
 		finalQuery = finalQuery.replace("{vmsisdn}", vMsisdn);
+		finalQuery = finalQuery.replace("{lastDigit}", lastDigit);
+		return finalQuery;
+	}
+	public static String getVoiceMailMca(String query, String aparty,String bparty,String vMsisdn,String server)
+	{
+		String finalQuery = query.replace("{aparty}", aparty);
+		finalQuery = finalQuery.replace("{bparty}", bparty);
+		finalQuery = finalQuery.replace("{vMsisdn}", vMsisdn);
+		finalQuery = finalQuery.replace("{vmsisdn}", vMsisdn);
+		finalQuery = finalQuery.replace("{server}", server);
 		return finalQuery;
 	}
 	public static String insertEventBaseChargingQuery(String query,String transactionId,String aparty,String vMsisdn,String interfaceId, String action,String serviceId, String productId, String isCharging, String result, String errorCode,String amount)
@@ -171,7 +182,9 @@ public class ChatUtils {
 	public static String insertVsmsMessageDetailsQuery(String query,String transactionId,String subscriberId,String vMsisdn,String interfaceId,String status,String duration,String recordingPath)
 	{
 		
+			
 		String finalQuery = query.replace("{transactionId}", transactionId);
+		
 		finalQuery = finalQuery.replace("{subscriberId}", subscriberId);
 		finalQuery = finalQuery.replace("{vMsisdn}", vMsisdn);
 		finalQuery = finalQuery.replace("{interfaceId}", interfaceId);
@@ -182,7 +195,21 @@ public class ChatUtils {
 		
 		return finalQuery;
 	}
-	
+	public static String insertVoiceMailInsert(String query,String subscriberId,String vMsisdn,String interfaceId,String status,String duration,String recordingPath)
+	{
+		String lastDigit = String.valueOf(vMsisdn.charAt(vMsisdn.length() - 1));
+			
+		String finalQuery = query.replace("{subscriberId}", subscriberId);
+		finalQuery = finalQuery.replace("{table_index}", lastDigit);
+		finalQuery = finalQuery.replace("{vMsisdn}", vMsisdn);
+		finalQuery = finalQuery.replace("{interfaceId}", interfaceId);
+		finalQuery = finalQuery.replace("{status}", status);
+		finalQuery = finalQuery.replace("{duration}", duration);
+		finalQuery = finalQuery.replace("{recordingPath}", recordingPath);
+		
+		
+		return finalQuery;
+	}
 	public static String updateSubProfileQuery(String query, String aparty, String bparty, String sub_status, String offer)
 	{
 		String finalQuery = query.replace("{aparty}", aparty);

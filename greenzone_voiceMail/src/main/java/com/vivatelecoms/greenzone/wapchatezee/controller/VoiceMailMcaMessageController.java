@@ -54,14 +54,49 @@ public class VoiceMailMcaMessageController {
 	@RequestMapping(value = "/mcaSmsMessageReq",method = RequestMethod.GET)
 	@ResponseBody
 	public String eventBaseBillingController(@RequestParam("aparty") String aparty,@RequestParam("bparty") String bparty,
-			@RequestParam("vMsisdn") String vMsisdn,HttpServletRequest req,
+			@RequestParam("vMsisdn") String vMsisdn,@RequestParam(required = false) String asyncFlag,@RequestParam(required = false) String server,HttpServletRequest req,
 			HttpServletResponse res) {
 			
 			
-			
-			logger.info("mcaSmsMessageReq|aparty="+aparty+"|bparty="+bparty+"|vMsisdn="+vMsisdn);
-			
 			String responseString="";
+			logger.info("mcaSmsMessageReq|aparty="+aparty+"|bparty="+bparty+"|vMsisdn="+vMsisdn+"|asyncFlag="+asyncFlag+"|server="+server);
+			if(asyncFlag == null || asyncFlag.isEmpty() || asyncFlag == "")
+			{
+				asyncFlag="N";
+			}
+			if(asyncFlag.equalsIgnoreCase("Y"))
+			{  
+				logger.info("mcaSmsMessageReq|aparty="+aparty+"|bparty="+bparty+"|vMsisdn="+vMsisdn+"|asyncFlag="+asyncFlag+"|server="+server);
+				String responseReturn="Ok";
+				if(aparty == null || aparty.isEmpty()||vMsisdn == null || vMsisdn.isEmpty())
+				{
+					logger.info("mcaSmsMessageReq|number is empty So no MCN|aparty="+aparty+"|bparty="+bparty+"|vMsisdn="+vMsisdn+"|asyncFlag="+asyncFlag+"|server="+server);
+					responseString = responseString.concat("MCA_SMS_RES.result=\'"+responseReturn+"\';");
+					
+					return responseString;
+				}
+				if(server==null ||server.isEmpty())
+					server="0";
+				String insertQuery = ChatUtils.getVoiceMailMca(env.getProperty("SQL53_INSERT_VOICEMAIL_MCN"), aparty, bparty,vMsisdn,server);
+				logger.info("final insertQuery="+insertQuery);
+				try {
+					int insertQueryResult= jdbcTemplate.update(insertQuery);
+					if(insertQueryResult <= 0)
+					{
+						logger.error("Failed to insert into Async mcn table");
+					}else {
+						logger.info("Successfully to insert into VMAIL_ASYNC_MCN_INFO_ |resultChangesRow="+insertQueryResult);
+					}
+				}catch(Exception e){
+					logger.error("SQL Exception" + e + "Query=" + insertQuery);
+				}
+				responseString = responseString.concat("MCA_SMS_RES.result=\'"+responseReturn+"\';");
+				
+				return responseString;
+				
+			}	
+			
+			
 			String postClientRes="-10";
 			/*Start Check User Language **/
 			String defaultLanguage="default";
